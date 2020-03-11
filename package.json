@@ -1,0 +1,49 @@
+{
+    "name": "create-parsify-plugin",
+    "version": "0.0.1",
+    "description": "Easily create plugins for Parsify",
+    "main": "index.js",
+    "scripts": {
+        "test": "xo"
+    },
+    "bin": {
+        "create-parsify-plugin": "index.js"
+    },
+    "preferGlobal": true,
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/parsify-dev/create-parsify-plugin.git"
+    },
+    "engines": {
+        "node": ">=10"
+    },
+    "keywords": [
+        "parsify",
+        "create-parsify-plugin",
+        "plugin",
+        "expression",
+        "parser",
+        "creator",
+        "cli"
+    ],
+    "author": {
+        "name": "Antoni Kepinski",
+        "email": "a@kepinski.me",
+        "url": "https://kepinski.me"
+    },
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/parsify-dev/create-parsify-plugin/issues"
+    },
+    "homepage": "https://github.com/parsify-dev/create-parsify-plugin#readme",
+    "dependencies": {
+        "chalk": "^3.0.0",
+        "execa": "^4.0.0",
+        "getopts": "^2.2.5",
+        "ora": "^4.0.3",
+        "prompts": "^2.3.1"
+    },
+    "devDependencies": {
+        "xo": "^0.27.2"
+    }
+}
