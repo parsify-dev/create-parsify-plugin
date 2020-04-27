@@ -31,42 +31,62 @@ if (options.version) {
 (async () => {
 	let repoUrl;
 
-	const response = await prompts({
-		type: 'select',
-		name: 'boilerplate',
-		message: 'Select plugin boilerplate:',
-		choices: [
-			{title: 'TypeScript', value: 'ts'},
-			{title: 'JavaScript', value: 'js'}
-		],
-		initial: 0
+	const questions = [
+		{
+			type: 'text',
+			name: 'name',
+			message: 'Type your plugin\'s name:'
+		},
+		{
+			type: 'select',
+			name: 'boilerplate',
+			message: 'Select plugin boilerplate:',
+			choices: [
+				{title: 'TypeScript', value: 'ts'},
+				{title: 'JavaScript', value: 'js'}
+			],
+			initial: 0
+		}
+	];
+
+	const response = await prompts(questions);
+
+	const isCorrect = await prompts({
+		type: 'confirm',
+		name: 'value',
+		message: 'Is this correct?',
+		initial: true
 	});
 
-	if (response.boilerplate === 'ts') {
-		repoUrl = 'https://github.com/parsify-dev/plugin-boilerplate-typescript';
+	if (isCorrect) {
+		if (response.boilerplate === 'ts') {
+			repoUrl = 'https://github.com/parsify-dev/plugin-boilerplate-typescript';
+		} else {
+			repoUrl = 'https://github.com/parsify-dev/plugin-boilerplate-javascript';
+		}
+
+		const spinner = ora('Cloning repository...').start();
+
+		try {
+			await execa('git', ['clone', repoUrl, response.name]);
+			spinner.succeed('Done!');
+			console.log(`
+	Next steps:
+
+	1. Enter the plugin directory
+	${chalk.cyan(`$ cd ${response.name || (response.boilerplate === 'ts' ? 'plugin-boilerplate-typescript' : 'plugin-boilerplate-javascript')}`)}
+
+	2. Install dependencies
+	${chalk.cyan('$ npm install')} ${chalk.dim('# you can also use yarn etc.')}
+
+	3. Enjoy!
+			`);
+		} catch (error) {
+			spinner.fail('Something went wrong! Check the output below:\n');
+			console.log(error.stderr);
+		}
 	} else {
-		repoUrl = 'https://github.com/parsify-dev/plugin-boilerplate-javascript';
-	}
-
-	const spinner = ora('Cloning repository...').start();
-
-	try {
-		await execa('git', ['clone', repoUrl]);
-		spinner.succeed('Done!');
-		console.log(`
-Next steps:
-
-1. Enter the plugin directory
-${chalk.cyan(`$ cd ${response.boilerplate === 'ts' ? 'plugin-boilerplate-typescript' : 'plugin-boilerplate-javascript'}`)}
-
-2. Install dependencies
-${chalk.cyan('$ npm install')} ${chalk.dim('# you can also use yarn etc.')}
-
-3. Enjoy!
-		`);
-	} catch (error) {
-		spinner.fail('Something went wrong! Check the output below:\n');
-		console.log(error.stderr);
+		console.log(chalk.cyan('Exiting...'));
 	}
 })();
 

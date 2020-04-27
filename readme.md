@@ -17,6 +17,17 @@ or
 $ npm install --global create-parsify-plugin
 ```
 
+## Usage
+
+```
+Usage: 
+    $ create-parsify-app
+
+Options:
+    --help, -h      Display help message
+    --version, -v   Output version
+```
+
 ### License
 
 MIT
