@@ -1,6 +1,6 @@
 {
     "name": "create-parsify-plugin",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Easily create plugins for Parsify",
     "main": "index.js",
     "scripts": {

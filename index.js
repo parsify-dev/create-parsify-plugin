@@ -51,26 +51,18 @@ if (options.version) {
 
 	const response = await prompts(questions);
 
-	const isCorrect = await prompts({
-		type: 'confirm',
-		name: 'value',
-		message: 'Is this correct?',
-		initial: true
-	});
+	if (response.boilerplate === 'ts') {
+		repoUrl = 'https://github.com/parsify-dev/plugin-boilerplate-typescript';
+	} else {
+		repoUrl = 'https://github.com/parsify-dev/plugin-boilerplate-javascript';
+	}
 
-	if (isCorrect) {
-		if (response.boilerplate === 'ts') {
-			repoUrl = 'https://github.com/parsify-dev/plugin-boilerplate-typescript';
-		} else {
-			repoUrl = 'https://github.com/parsify-dev/plugin-boilerplate-javascript';
-		}
+	const spinner = ora('Cloning repository...').start();
 
-		const spinner = ora('Cloning repository...').start();
-
-		try {
-			await execa('git', ['clone', repoUrl, response.name]);
-			spinner.succeed('Done!');
-			console.log(`
+	try {
+		await execa('git', ['clone', repoUrl, response.name]);
+		spinner.succeed('Done!');
+		console.log(`
 	Next steps:
 
 	1. Enter the plugin directory
@@ -81,12 +73,9 @@ if (options.version) {
 
 	3. Enjoy!
 			`);
-		} catch (error) {
-			spinner.fail('Something went wrong! Check the output below:\n');
-			console.log(error.stderr);
-		}
-	} else {
-		console.log(chalk.cyan('Exiting...'));
+	} catch (error) {
+		spinner.fail('Something went wrong! Check the output below:\n');
+		console.log(error.stderr);
 	}
 })();
 
